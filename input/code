@@ -1,0 +1,18 @@
+main () {
+	home
+	if () {
+		if () {
+			while () {
+				whatever
+			}
+		}
+	}
+}
+
+home () {
+	while () {
+		if () {
+			something
+		}
+	}
+}
