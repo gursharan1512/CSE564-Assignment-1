@@ -1,4 +1,4 @@
-compiler.iml
-.idea/
+*.iml
+.idea/**
 .DS_Store
 *.class
