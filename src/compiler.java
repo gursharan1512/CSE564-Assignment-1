@@ -5,27 +5,17 @@ import java.util.Vector;
 public class compiler {
     public static void main(String[] args) throws IOException {
 
-        String text = readTextFile(args[0]);
-        //Vector<String> text = readTextFile(args[0]);
-        Vector<StringTokenizer> lineVector = splitString(text);
-
-        translate(lineVector);
-
-//        for (StringTokenizer lineToken: lineVector) {
-//            while (lineToken.hasMoreTokens()) {
-//                System.out.print(lineToken.nextToken() + " ");
-//            }
-//            System.out.print("\n");
-//        }
-//        for (StringTokenizer lineToken: lineVector) {
-//            if (lineToken.hasMoreTokens()) {
-//                System.out.println(lineToken.nextToken() + " ");
-//            }
-
-//            if (lineToken.hasMoreTokens()) {
-//                System.out.println(lineToken.nextToken());
-//            }
+        if (args.length > 0) {
+            String text = readTextFile(args[0]);
+            //Vector<String[]> lineVector = splitString(text);
+            String[] lineVector = splitString(text);
+            translate(lineVector);
         }
+        else {
+            //raise exception - argument not passed
+        }
+
+    }
 
     public static String readTextFile (String path) throws IOException {
 
@@ -34,70 +24,103 @@ public class compiler {
         BufferedReader br = new BufferedReader(new FileReader( file ));
         String str;
         while ( (str = br.readLine()) != null) {
-            text = text + str + " \n ";
+            text = text + str + " ";
         }
-        return text;
+        String text2 = text.replaceAll("\\s+", " ");
+        System.out.println(text2);
+        return text2;
     }
 
-//    public static Vector<String> readTextFile (String path) throws IOException {
-//        String str;
-//        File file = new File(path);
-//        BufferedReader br = new BufferedReader(new FileReader( file ));
-//        Vector<String> vector = new Vector<String>();
-//        while ( (str = br.readLine()) != null) {
-//            vector.add(str);
-//        }
-//        return vector;
-//    }
-
-    public static Vector<StringTokenizer> splitString (String text) {
-
-        String[] lines = text.split("\n");
-
-        Vector<StringTokenizer> vector = new Vector<StringTokenizer>();
-
-        for ( String line: lines) {
-            StringTokenizer st = new StringTokenizer(line);
-            vector.add(st);
-        }
-
-        return vector;
+    public static String[] splitString (String text) {
+        return text.split(" ");
     }
 
-    public static void translate(Vector<StringTokenizer> lineVector) {
-
-        for (StringTokenizer lineToken: lineVector) {
-            while (lineToken.hasMoreTokens()) {
-                checkIf(lineToken);
+    public static void translate(String[] lineVector) {
+        if (lineVector.length > 0) {
+            Integer i = 0;
+            while (i < lineVector.length) {
+                i = checkMethod(lineVector, i);
+                System.out.println("\n");
             }
         }
-
-//        checkMethod();
-//        checkIf();
-//        checkWhile();
-//        checkInstruction();
     }
 
-    public static void checkMethod(StringTokenizer lineToken) {
+
+    public static Integer checkMethod(String[] lineToken, Integer i) {
+
+        if (!lineToken[i].equals("if") && !lineToken[i].equals("while") && !lineToken[i].equals("}")) {
+            ++i;
+            if (lineToken[i].equals("(")) {
+                ++i;
+                if (lineToken[i].equals(")")) {
+                    ++i;
+                    if (lineToken[i].equals("{")) {
+                        ++i;
+                        System.out.print("[ ");
+                        i = checkMethod(lineToken, i);
+                        i = checkIf(lineToken, i);
+                        i = checkWhile(lineToken, i);
+                        if (lineToken[i].equals("}")) {
+                            System.out.print("] ");
+                            ++i;
+                        }
+                    }
+                }
+            }
+            else {
+                System.out.print("- ");
+            }
+        }
+        return i;
     }
 
-    public static void checkIf(StringTokenizer lineToken) {
-        if (lineToken.nextToken().equals("if")) {
-            if (lineToken.nextToken().equals("(")) {
-                if (lineToken.nextToken().equals(")")) {
-                    if (lineToken.nextToken().equals("{")) {
+    public static Integer checkIf(String[] lineToken, Integer i) {
 
+        if (lineToken[i].equals("if")) {
+            ++i;
+            if (lineToken[i].equals("(")) {
+                ++i;
+                if (lineToken[i].equals(")")) {
+                    ++i;
+                    if (lineToken[i].equals("{")) {
+                        ++i;
+                        System.out.print("< ");
+                        i = checkMethod(lineToken, i);
+                        i = checkIf(lineToken, i);
+                        i = checkWhile(lineToken, i);
+                        if (lineToken[i].equals("}")) {
+                            System.out.print("> ");
+                            ++i;
+                        }
                     }
                 }
             }
         }
+        return i;
     }
 
-    public static void checkWhile(String currentWord) {
+    public static Integer checkWhile(String[] lineToken, Integer i) {
 
-    }
-
-    public static void checkInstruction(String currentWord) {
-
+        if (lineToken[i].equals("while")) {
+            ++i;
+            if (lineToken[i].equals("(")) {
+                ++i;
+                if (lineToken[i].equals(")")) {
+                    ++i;
+                    if (lineToken[i].equals("{")) {
+                        ++i;
+                        System.out.print("( ");
+                        i = checkWhile(lineToken, i);
+                        i = checkIf(lineToken, i);
+                        i = checkMethod(lineToken, i);
+                        if (lineToken[i].equals("}")) {
+                            System.out.print(") ");
+                            ++i;
+                        }
+                    }
+                }
+            }
+        }
+        return i;
     }
 }

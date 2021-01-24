@@ -1,17 +1,15 @@
-main () {
+main ( ) {
 	home
-	if () {
-		if () {
-			while () {
-				whatever
-			}
-		}
-	}
+	while ( ) {
+		while ( ) { 
+			whatever
+		} 
+	} 
 }
-
-home () {
-	while () {
-		if () {
+ 
+home ( ) {
+	while ( ) {
+		if ( ) {
 			something
 		}
 	}
