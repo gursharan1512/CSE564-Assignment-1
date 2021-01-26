@@ -1,16 +1,23 @@
 main ( ) {
 	home
 	while ( ) {
-		while ( ) { 
+		while ( ) {
 			whatever
-		} 
-	} 
+		}
+	}
 }
- 
+
 home ( ) {
 	while ( ) {
 		if ( ) {
 			something
+			if ( ) {
+			}
 		}
 	}
+	while ( ) {
+    		if ( ) {
+    			something
+    		}
+    	}
 }
