@@ -113,7 +113,7 @@ public class compiler {
     public static int checkInstruction(String[] tokens, int counter){
 
         if (!tokens[counter].equals("if") && !tokens[counter].equals("while") && !tokens[counter].equals("}")) {
-            if (tokens[counter].equals("(") || tokens[counter].equals(")")) {
+            if (tokens[counter].equals("(") || tokens[counter].equals(")") || tokens[counter].equals("{")) {
                 throw new RuntimeException("Invalid Syntax");
             }
             ++counter;
@@ -142,12 +142,26 @@ public class compiler {
                         counter = checkInstruction(tokens, counter);
                         counter = checkIf(tokens, counter);
                         counter = checkWhile(tokens, counter);
-                        if (tokens[counter].equals("}")) {
+                        if (!tokens[counter].equals("}")) {
+                            while (!tokens[counter].equals("}")){
+                                counter = checkInstruction(tokens, counter);
+                                counter = checkIf(tokens, counter);
+                                counter = checkWhile(tokens, counter);
+                            }
+                            System.out.print("> ");
+                            ++counter;
+                        } else {
                             System.out.print("> ");
                             ++counter;
                         }
+                    } else {
+                        throw new RuntimeException("Invalid Syntax");
                     }
+                } else {
+                    throw new RuntimeException("Invalid Syntax");
                 }
+            }  else {
+                throw new RuntimeException("Invalid Syntax");
             }
         }
         return counter;
@@ -173,12 +187,26 @@ public class compiler {
                         counter = checkWhile(tokens, counter);
                         counter = checkIf(tokens, counter);
                         counter = checkInstruction(tokens, counter);
-                        if (tokens[counter].equals("}")) {
+                        if (!tokens[counter].equals("}")) {
+                            while (!tokens[counter].equals("}")){
+                                counter = checkInstruction(tokens, counter);
+                                counter = checkIf(tokens, counter);
+                                counter = checkWhile(tokens, counter);
+                            }
+                            System.out.print(") ");
+                            ++counter;
+                        } else {
                             System.out.print(") ");
                             ++counter;
                         }
+                    }  else {
+                        throw new RuntimeException("Invalid Syntax");
                     }
+                } else {
+                    throw new RuntimeException("Invalid Syntax");
                 }
+            } else {
+                throw new RuntimeException("Invalid Syntax");
             }
         }
         return counter;
